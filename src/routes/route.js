@@ -2,32 +2,76 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get("/sol1",function(req,res){
-    let arr= [1,2,4,5,6,7,8,9]
-        let sum =0;
-        let n = arr.length
-        for (let i =0;i<n;i++){
-            sum += arr[i]
-        }    
-        let lastdigit = arr.pop()
-      let  consecutiveSum = lastdigit*(lastdigit+1)/2
-      let missingNumber =consecutiveSum-sum
-      res.send({missingNumber: missingNumber }  );
-})
-router.get("/sol2", function (req, res) {
-       let arr= [33, 34, 35, 37, 38]
-       let len= arr.length
-  
-      let total = 0;
-      for (var i in arr) {
-         total += arr[i];
+let arr =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ],
+           "bookings": [
+               {
+                   "bookingNumber": 1,
+                   "sportId": "",
+                   "centerId": "",
+                   "type": "private",
+                   "slot": '16286598000000',
+                   "bookedOn": '31/08/2021',
+                   "bookedFor": '01/09/2021'
+               },
+               {
+                   "bookingNumber": 2,
+                   "sportId": "",
+                   "centerId": "",
+                   "type": "private",
+                   "slot": '16286518000000',
+                   "bookedOn": '31/08/2001',
+                   "bookedFor": '01/09/2001'
+               },
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ],
+           "bookings": []
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ],
+           "bookings": []
+       },
+   ]
+   router.post('/player', function (req, res) {
+    let details = req.body.name1.name
+    let inputDetails = req.body.name1
+    for (let i = 0; i < arr.length; i++) {
+    if (details === arr[i].name) {
+    console.log("Data already exist")
+    res.send("Data already exist")
     }
-  
-       let firstDigit= arr[0]
-       let lastDigit= arr.pop()
-       let consecutiveSum= (len + 1) * (firstDigit+ lastDigit ) / 2
-       let missingNumber= consecutiveSum - total
-   
-      res.send(  { data: missingNumber  }  );
-  });
-
+    else if (i === arr.length - 1) {
+    arr.push( inputDetails )
+    res.send({arr})
+    } 
+    }  
+    res.send(  { data: players , status: true }  )
+})
+   router.post('/players/:playerName/bookings/:bookingId', function (req, res) {
+ 
+       //LOGIC WILL COME HER
+       res.send(  { data: players , status: true }  )
+   })  
+module.exports = router;
