@@ -2,93 +2,98 @@ const express = require('express');
 const router = express.Router();
 
 
-let arr =
-   [
-       {
-           "name": "manish",
-           "dob": "1/1/1995",
-           "gender": "male",
-           "city": "jalandhar",
-           "sports": [
-               "swimming"
-           ],
-           "bookings": [
-               {
-                   "bookingNumber": 1,
-                   "sportId": "",
-                   "centerId": "",
-                   "type": "private",
-                   "slot": '16286598000000',
-                   "bookedOn": '31/08/2021',
-                   "bookedFor": '01/09/2021'
-               },
-               {
-                   "bookingNumber": 2,
-                   "sportId": "",
-                   "centerId": "",
-                   "type": "private",
-                   "slot": '16286518000000',
-                   "bookedOn": '31/08/2001',
-                   "bookedFor": '01/09/2001'
-               },
-           ]
-       },
-       {
-           "name": "gopal",
-           "dob": "1/09/1995",
-           "gender": "male",
-           "city": "delhi",
-           "sports": [
-               "soccer"
-           ],
-           "bookings": []
-       },
-       {
-           "name": "lokesh",
-           "dob": "1/1/1990",
-           "gender": "male",
-           "city": "mumbai",
-           "sports": [
-               "soccer"
-           ],
-           "bookings": []
-       },
-   ]
+let players = [];
    router.post('/player', function (req, res) {
-    let details = req.body.name1.name
-    let inputDetails = req.body.name1
-    for (let i = 0; i < arr.length; i++) {
-    if (details === arr[i].name) {
-    console.log("Data already exist")
-    res.send("Data already exist")
-    }
-    else if (i === arr.length - 1) {
-    arr.push( inputDetails )
-    res.send({arr})
-    } 
-    }  
-    res.send(  { data: players , status: true }  )
+      let player =req.body;
+      let playerName =player.name
+      for(let i =0;i<players.length;i++){
+          if(players[i].name==playerName){
+              return res.send("player already exsit")
+          }
+      }
+      players.push(player);
+      return res.send(players);
 })
-router.post("/players/:playerName/bookings/:bookingId", function(req, res) {
-    let play = req.params.playerName
-    let book =req.params.bookingId
-    
-    const index = arr.findIndex(object => object.name === play)
-    if(index === -1){
-        res.send('player does not exists')   
-    }
+router.post('/players/:playerName/bookings/:bookingid',function(req,res){
+    let playerName = req.params.playerName;
+    let bookingId = req.params.bookingid;
+    let booking = req.body;
+    let bn = req.body.bookingNumber;
+    for(let i=0;i<players.length;i++){
+        if(playerName==players[i].name){
+            console.log(playerName==players[i].name)
+             let x=  players[i].bookings.find(ele=>ele.bookingNumber==bookingId)
+             let y=  players[i].bookings.find(ele=>ele.bookingNumber==bn)
+             if ( x||y ){
+                return res.send("Booking id already exists")
+             }
+                players[i].bookings.push(booking)
+                return res.send(players)
+            }
+     }
+    return res.send("Player does not exist")
+})
 
-    else{
-    let a = arr[index].bookings
-    const i = a.findIndex(object => object.bookingNumber == book)
-        if(i === -1 ){
-            a.push(req.body)
-            res.send(  arr[index] )
-           
-        }
-        else{
-            res.send("booking exists")
+let arr=[61,42,32,47,58,68,78,97,65,4]
+router.post("/post-query-3", function(req, res) {
+    let input = req.query.input
+    let finalarray = []
+    for(i=0;i<arr.length;i++){
+    if(arr[i]> input)
+      finalarray.push(arr[i])
+    }
+    res.send( {data: finalarray, status:true} )
+})
+
+let persons = [
+    {
+        name: "PK",
+        age: 10,
+        votingStatus: false
+    },
+    {
+        name: "SK",
+        age: 20,
+        votingStatus: false
+    },
+    {
+        name: "AA",
+        age: 70,
+        votingStatus: false
+    },
+    {
+        name: "SC",
+        age: 5,
+        votingStatus: false
+    },
+    {
+        name: "HO",
+        age: 40,
+        votingStatus: false
+    }
+]
+
+router.post("/election", function (req, res) {
+    let votingAge = req.query.votingAge
+
+    let mahir=[];
+    for (let i = 0; i < persons.length; i++) {
+
+        if (persons[i].age > votingAge) {
+        
+            persons[i].votingStatus = true
+            mahir.push(persons[i])
         }
     }
+if (mahir.length>0)
+{
+    return res.send(mahir)
+}
+else{
+    return res.send("no member found above this age")
+}
+
 })
-module.exports = router;
+
+   module.exports = router;
+
