@@ -69,9 +69,26 @@ let arr =
     }  
     res.send(  { data: players , status: true }  )
 })
-   router.post('/players/:playerName/bookings/:bookingId', function (req, res) {
- 
-       //LOGIC WILL COME HER
-       res.send(  { data: players , status: true }  )
-   })  
+router.post("/players/:playerName/bookings/:bookingId", function(req, res) {
+    let play = req.params.playerName
+    let book =req.params.bookingId
+    
+    const index = arr.findIndex(object => object.name === play)
+    if(index === -1){
+        res.send('player does not exists')   
+    }
+
+    else{
+    let a = arr[index].bookings
+    const i = a.findIndex(object => object.bookingNumber == book)
+        if(i === -1 ){
+            a.push(req.body)
+            res.send(  arr[index] )
+           
+        }
+        else{
+            res.send("booking exists")
+        }
+    }
+})
 module.exports = router;
