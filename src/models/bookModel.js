@@ -13,4 +13,4 @@ const bookSchema = new mongoose.Schema( {
     year: Number
 }, { timestamps: true });   
    
-module.exports = mongoose.model('Book', bookSchema)
+module.exports = mongoose.model('Book', bookSchema) 
