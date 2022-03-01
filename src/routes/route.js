@@ -10,12 +10,12 @@ router.post("/createBook", BookController.createBook)
 
 router.get("/bookList", BookController.bookList)
 
-router.post("/getBooksInYear/:Year",BookController.getBooksInYear)
+router.post("/getBooksInYear",BookController.getBooksInYear)
 
-// router.post("/getParticularBooks",BookController.getParticularBooks)
+ router.post("/getParticularBooks",BookController.getParticularBooks)
 
- router.get("/getXINRBooks", BookController.getXINRBooks)
+//  router.get("/getXINRBooks", BookController.getXINRBooks)
 
-// router.get("/getRandomBooks", BookController.getXINRBooks)
+router.post("/getRandomBooks", BookController.getRandomBooks)
   
 module.exports = router;  
