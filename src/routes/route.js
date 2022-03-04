@@ -9,5 +9,6 @@ const publisherController = require("../controllers/publisherController")
 router.post("/createPublisher", publisherController.createPublisher)
 router.post("/createBook", bookController.createBook  )
 router.get("/getBooks", bookController.getBooks)
-
+router.put("/books", bookController.books)
+router.put("/changeBookPrice", bookController.changeBookPrice)
 module.exports = router;
