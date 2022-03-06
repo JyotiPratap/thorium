@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
 const { default: mongoose} = require("mongoose");
+let requestIp = require("Ip");
+let DateTimeYear=require("date-and-time");
 const app = express();
 
 app.use(bodyParser.json());
@@ -14,9 +16,17 @@ mongoose.connect("mongodb://localhost:27017/Mongo3",{
 .then( () => console.log("mongodb is connected"))
 .catch(err => console.log(err))
 
+app.use(function(req,res,next){
+    let now = new Date();
+    let dateTimeNow = DateTimeYear.format(now,"YYYY/MM/DD HH:MM:SS")
+    let url = req.url
+    let clientIp = requestIp.address();
+    console.log(dateTimeNow,clientIp,url)
+    next();
+});
+ 
 app.use('/', route); 
 
 app.listen(process.env.PORT || 3000, function() {
     console.log('Express app running on port ' + (process.env.PORT || 3000))
 });
- 
