@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const authorController = require("../controllers/authorController")
-const bookController = require("../controllers/bookController")
-const publisherController = require("../controllers/publisherController")
+const UserController= require("../controllers/userController")
+const OrderController= require("../controllers/orderController")
+const ProductController= require("../controllers/productController")
+const commonMw = require("../middleware/middleware")
  
- router.post("/createAuthor", authorController.createAuthor  )
-router.post("/createPublisher", publisherController.createPublisher)
-router.post("/createBook", bookController.createBook  )
-router.get("/getBooks", bookController.getBooks)
-router.put("/books", bookController.books)
-router.put("/changeBookPrice", bookController.changeBookPrice)
 
 
-router.get("/test-me", function (req, res) {
-    res.send("My first ever api!")
-})
+router.post("/createUser", commonMw.mid1, UserController.createUser  )
+router.post("/createProduct", ProductController.createProduct )
+router.post("/createOrder", commonMw.mid1, OrderController.createOrder  )
+
+
 module.exports = router;
