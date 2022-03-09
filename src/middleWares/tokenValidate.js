@@ -1,11 +1,15 @@
-let mid1 = function(req,res,next){
-    let xAuthToken = req.headers["a-auth-token"]
-    if(xAuthToken!=undefined){
-        console.log("done")
-        next()
+const jwt = require("jsonwebtoken");
+
+const tokenChecker = function(req,res,next){
+
+    let token = req.headers["x-auth-token"]
+    if(!token){
+        return res.send("token missing")
     }
-    else{
-        res.send("request is missing a mandatory header")
+    let decoderToken = jwt.verify(token, "functionup-thorium");
+    if(!decoderToken){
+        return res.send("Invalid token")
     }
-}
-module.exports.mid1=mid1
+    next()
+} 
+module.exports.tokenChecker=tokenChecker
