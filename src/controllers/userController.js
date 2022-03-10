@@ -56,7 +56,7 @@ const updateUser = async function (req, res) {
     return res.send("No such user exists");
   }
   // let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId },{$set:{age:300}}, {$new:true});
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId },{$set:{age:30}}, {$new:true});
   res.send({ status: updatedUser, data: updatedUser });
 };
 
