@@ -2,23 +2,41 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 const createUser = async function (req, res) {
-  let data = req.body;
-  let savedData = await userModel.create(data);
-  console.log(req.newAtribute);
-  res.send({ msg: savedData });
+  try{
+     let data = req.body;
+     if(Object.keys(data).length != 0){
+     let savedData = await userModel.create(data);
+     console.log(req.newAtribute);
+     res.status(201).send({ msg: savedData });
+   }
+   else res.status(400).send({msg:"bad request"})
+  }
+  catch(err){
+     console.log("this is the error:",err.message)
+      res.status(500).send({msg:"Error",error:err.message})
+   }
 };
  
+
 const loginUser = async function (req, res) {
+  try{
   let userName = req.body.emailId;
   let password = req.body.password;
-
+  if(!userName||!password){
+    res.status(400).send({msg:"Please input both userName and password."})
+  }
   let user = await userModel.findOne({ emailId: userName, password: password });
   if (!user)
     return res.send({
       status: false,
       msg: "username or the password is not corerct",
     });
-
+    if (!user)
+  return res.status(200).send({
+      status: false,
+      msg: "username or the password is not corerct",
+    });
+    
   let token = jwt.sign(
     {
       userId: user._id.toString(),
@@ -27,11 +45,19 @@ const loginUser = async function (req, res) {
     },
     "functionup-thorium"
   );
-//res.setHeader("x-auth-token", token);
-  res.send({ status: true, data: token });
-};
+  res.setHeader("x-auth-token", token);
+  res.status(200).send({ status: true, data: token });
+}
+catch{
+  console.log("This is the error :", err.message)
+  res.status(500).send({ msg: "Error", error: err.message })
+  }
+}
 
+
+  
 const getUserData = async function (req, res) {
+  try{
   let token = req.headers["x-Auth-token"];
    token = req.headers["x-auth-token"];
   if (!token) 
@@ -42,23 +68,33 @@ const getUserData = async function (req, res) {
     return res.send({ status: false, msg: "token is invalid" });
 
   let userId = req.params.userId;
+  if(!userId) return res.status(400).send({msg:"Please input user id."})
   let userDetails = await userModel.findById(userId);
   if (!userDetails)
-    return res.send({ status: false, msg: "No such user exists" });
- 
-  res.send({ status: true, data: userDetails });
-};  
+  return res.status(200).send({ status: false, msg: "No such user exists" });
+  res.status(404).send({ status: true, data: userDetails });
+} catch(error){
+  return res.status(500).send(error.message)
+ }
+};
 
 const updateUser = async function (req, res) {
+  try{
   let userId = req.params.userId;
+  if (!userId){
+    return  res.status(400).send({msg:"Please input user Id."})
+    }
   let user = await userModel.findById(userId);
   if (!user) {
-    return res.send("No such user exists");
+    return  res.status(400).send("No such user exists");
   }
   // let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId },{$set:{age:30}}, {$new:true});
-  res.send({ status: updatedUser, data: updatedUser });
-};
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId },{$set:{age:40}}, {$new:true});
+  res.status(200)({ status: updatedUser, data: updatedUser });
+}catch{
+  res.status(500).send(error.message)
+}};
+
 
 const deleteUser = async function(req,res){
     let token = req.headers["x-auth-token"];
