@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const userController= require("../controllers/userController")
-const middleware= require("../middleWares/tokenValidate")
+const CowinController= require("../controllers/cowinController")
 
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
-
  
-router.post("/users", userController.createUser  )
-
-router.post("/login", userController.loginUser)
-router.get("/users/:userId",middleware.authenticate, userController.getUserData)
-router.put("/users/:userId",middleware.authenticate, userController.updateUser)
-router.delete("/users/:userId",middleware.authenticate,userController.deleteUser)
-router.post("/users/userId/posts",middleware.authenticate,userController.postMessage)
-
+router.get("/cowin/states", CowinController.getStates)
+router.get("/cowin/districtsInState/:stateId", CowinController.getDistricts)
+router.get("/cowin/getByPin", CowinController.getByPin)
+router.post("/cowin/getOtp", CowinController.getOtp)
+ 
+router.get("/cowin/getByDistrict", CowinController.getDistrictSessions)
+router.get("/getSortedCities", CowinController.getSortedCities)
+router.post("/memes",CowinController.memeHandler)
+ 
 module.exports = router;
