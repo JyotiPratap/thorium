@@ -134,7 +134,7 @@ const memeHandler = async function(req,res){
         res.status(500).send({status:false, msg: "server error"})
     }  
 } 
-
+ 
 
 module.exports.getStates = getStates
 module.exports.getDistricts = getDistricts
