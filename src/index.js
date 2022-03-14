@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const route = require('./routes/route.js');
+const route = require('./routes/routes.js');
 const { default: mongoose} = require("mongoose");
 let requestIp = require("Ip");
 let DateTimeYear=require("date-and-time");
@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // mongodb://Jyoti2002:jyoti123@cluster0-shard-00-00.ffcxb.mongodb.net:27017,cluster0-shard-00-01.ffcxb.mongodb.net:27017,cluster0-shard-00-02.ffcxb.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-pin56e-shard-0&authSource=admin&retryWrites=true&w=majority
 // mongodb://localhost:27017/test1
-mongoose.connect("mongodb://localhost:27017/Auth3",{
+mongoose.connect("mongodb://localhost:27017/Project1",{
     useNewUrlParser:true
 })
 .then( () => console.log("mongodb is connected"))
