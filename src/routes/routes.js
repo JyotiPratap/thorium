@@ -8,7 +8,7 @@ router.get("/test-me", function (req, res) {
 
 router.post("/createAuthor", controller.createAuthor)
 router.post("/createBlog", controller.createBlog)
-router.get("/get/blogs", controller.getblog)
+router.get("/getblogs", controller.getblog)
 router.put("/blogs/:blogId",controller.updateBlog)
 router.delete("/deleteBlogs/:blogId",controller.deleteBlogs)
 router.delete("/blogs",controller.deleteByQuery)

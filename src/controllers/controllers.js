@@ -56,20 +56,20 @@ const createAuthor = async function (req, res) {
 
  const getblog = async function (req, res) {
     try {
-        let allblogs = await blogsmodel.find({isDeleted:true,isPublished:true})
-        if (allblogs.length === 0){
+        const data = req.query;
+         let allblogs = await blogsmodel.find(data)
+        if (!allblogs){
         return res.status(404).send({ status: false, msg: "No such blog exists" });
         }
         else{
-        res.status(201).send({ status:true,data: allblogs });
+        res.status(200).send({ status:true,msg: allblogs });
         }
-    }
+}
     catch (err) {
         console.log("this is the error:", err.message)
-        res.status(500).send({ msg: "Error", error: err.message })
+        res.status(500).send({ status:false, msg: err.message })
     }
 };
-
 
 
 const updateBlog = async function (request, response) {
