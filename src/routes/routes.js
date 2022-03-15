@@ -9,7 +9,8 @@ router.get("/test-me", function (req, res) {
 router.post("/createAuthor", controller.createAuthor)
 router.post("/createBlog", controller.createBlog)
 router.get("/get/blogs", controller.getblog)
-router.put("/updateBlog",controller.updateBlog)
-router.delete("/deleteBlogs/:blogId",controller.deleteBlogs)
+router.put("/blogs/:blogId",controller.updateBlog)
+router.get("/deleteBlogs/:blogId",controller.deleteBlogs)
 // router.delete("/deleteByQuery",controller.deleteByQuery)
+// router.post("/login", controller.loginAuthor)
 module.exports = router;

@@ -6,18 +6,31 @@ let validator =require("email-validator");
 
 
 const createAuthor = async function (req, res) {
-    try{
-       let data = req.body;
-       if(Object.keys(data).length != 0){
-       let savedData = await AuthorModel.create(data);
-       res.status(200).send({ status:true,msg: savedData });
-     }
-     else res.status(400).send({msg:"bad request"})
+    try {
+         let author = req.body
+         if (Object.entries(author).length === 0) {
+              res.status(400).send({ status: false, msg: "Kindly pass some data " })
+         }
+         else {
+              let email = req.body.email
+              let check = validator.validate(email);
+              if (!check) {
+                   return res.status(401).send({ status: false, msg: "Enter a valid email id" })
+              }
+              let mail = await AuthorModel.findOne({ email })
+              if (mail) {
+                   return res.status(401).send({ status: false, msg: "Enter Unique Email Id." })
+              }
+
+              let authorCreated = await AuthorModel.create(author)
+              res.status(201).send({ status: true, data: authorCreated })
+         }
     }
-    catch(err){
-       console.log("this is the error:",err.message)
-        res.status(500).send({msg:"Error",error:err.message})
-     }
+    catch (error) {
+         console.log(error)
+         res.status(500).send({ status: false, msg: error.message })
+    }
+
   };
 
   const createBlog = async function (req, res) {
@@ -64,6 +77,7 @@ const updateBlog = async function (request, response) {
          const id = request.params.blogId;
          const data = request.body;
          const fetchData = await blogsmodel.findById(id);
+
          if (fetchData.isDeleted) {
              return response.status(404).send({
                  'status': false,
@@ -92,11 +106,14 @@ const deleteBlogs = async function (req, res) {
     try {
          let blogId = req.params.blogId;
          let blogInfo = await blogsmodel.findById(blogId);
-         console.log(blogInfo)
+
          if (!blogInfo)
               return res.status(404).send({ status: false, msg: "No such blog exists" });
+
+
          let deleteBlogs = await blogsmodel.findOneAndUpdate({ _id: blogId }, { $set: { isDeleted: true } }, { new: true });
-         res.status(201).send({ status: true});
+         res.status(201).send({ status: true, data: deleteBlogs });
+
 }
     catch (error) {
          console.log(error)
