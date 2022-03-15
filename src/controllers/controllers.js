@@ -1,4 +1,5 @@
 let axios = require("axios");
+const jwt = require("jsonwebtoken");
 const AuthorModel = require("../models/AuthorModel.js");
 const blogsmodel = require("../models/BlogsModel.js")
 let validator =require("email-validator");
@@ -149,13 +150,46 @@ const deleteByQuery = async function (request, response) {
          });
     } catch (error) {
          return response.status(500).send({
-              'Error: ': error.message
-         });
+              'Error: ': error.message});
     }
 }
+
+
+const loginUser = async function(req,res){
+     try{ let data = req.body
+          if (Object.entries(data).length === 0) {
+               res.status(400).send({ status: false, msg: "Kindly pass some data " })
+          }
+
+          let username = req.body.email
+          let password = req.body.password
+          let user = await AuthorModel.findOne({email : username,password : password})
+
+          if(!user)
+          {
+               return res.status(400).send({status : false, msg : "Credentials don't match,Please Check and Try again"})
+          }
+
+          let token = jwt.sign({
+               userId : user._id.toString(),  
+               batch: "thorium",
+          },"Project_1")
+          res.setHeader("x-api-key", token);
+          res.status(200).send({status : true, data : token})
+
+     }
+     catch(error)
+     {
+          console.log(error)
+          res.status(500).send({status: false, msg: error.message})
+     }
+}
+
+
 module.exports.createAuthor=createAuthor
 module.exports.createBlog=createBlog
 module.exports.getblog=getblog
 module.exports.updateBlog=updateBlog
 module.exports.deleteBlogs=deleteBlogs
 module.exports.deleteByQuery=deleteByQuery
+module.exports.loginUser=loginUser
