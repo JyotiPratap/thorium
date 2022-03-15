@@ -122,8 +122,40 @@ const deleteBlogs = async function (req, res) {
 };
    
 
+
+const deleteByQuery = async function (request, response) {
+
+    try {
+         const data = request.query;
+         const fetchData = await blogsmodel.find(data);
+         if (fetchData.length == 0) {
+              return response.status(404).send({
+                   status: false,
+                   msg: 'Blog not found ! .....'
+              });
+         }
+        
+              if (fetchData.isDeleted) {
+                   return response.status(404).send({
+                        status: false,
+                        msg: 'Blog not found !'
+                   });
+              }
+         
+         const dataRes = await blogsmodel.updateMany(data, { isDeleted: true });
+         return response.status(200).send({
+              status: true,
+              data: dataRes
+         });
+    } catch (error) {
+         return response.status(500).send({
+              'Error: ': error.message
+         });
+    }
+}
 module.exports.createAuthor=createAuthor
 module.exports.createBlog=createBlog
 module.exports.getblog=getblog
 module.exports.updateBlog=updateBlog
 module.exports.deleteBlogs=deleteBlogs
+module.exports.deleteByQuery=deleteByQuery
