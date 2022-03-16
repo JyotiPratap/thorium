@@ -14,14 +14,16 @@ const createAuthor = async function (req, res) {
          }
          else {
               let email = req.body.email
+              if(!email)
+              return res.status(400).send({status: false,msg:"Enter Valid Email"})
+
               let check = validator.validate(email);
               if (!check) {
-                   return res.status(401).send({ status: false, msg: "Enter a valid email id" })
-              }
+                   return res.status(401).send({ status: false, msg: "Enter a valid email id" }) } 
+
               let mail = await AuthorModel.findOne({ email })
               if (mail) {
-                   return res.status(401).send({ status: false, msg: "Enter Unique Email Id." })
-              }
+                   return res.status(401).send({ status: false, msg: "Enter Unique Email Id." })}
 
               let authorCreated = await AuthorModel.create(author)
               res.status(201).send({ status: true, data: authorCreated })
@@ -33,6 +35,38 @@ const createAuthor = async function (req, res) {
     }
 
   };
+
+  const loginUser = async function(req,res){
+     try{ let data = req.body
+          if (Object.entries(data).length === 0) {
+          res.status(400).send({ status: false, msg: "Kindly pass some data " })}
+
+          let username = req.body.email
+          let password = req.body.password
+
+          if(!username){
+               return res.status(400).send({status : false, msg : "Enter Valid Email"})}
+          if(!password){
+               return res.status(400).send({status:false,msg:"Enter valid Password"})}
+
+          let user = await AuthorModel.findOne({email : username,password : password})
+          if(!user){
+               return res.status(400).send({status:false,msg:"credentials dont match,plz check and try again"})} 
+            
+          let token = jwt.sign({
+               userId : user._id.toString(),  
+               batch: "thorium",
+          },"Project_1")
+          res.setHeader("x-api-key", token);
+          res.status(200).send({status : true, data : token})
+
+     }
+     catch(error)
+     {
+          console.log(error)
+          res.status(500).send({status: false, msg: error.message})
+     }
+}
 
   const createBlog = async function (req, res) {
     try{
@@ -155,35 +189,7 @@ const deleteByQuery = async function (request, response) {
 }
 
 
-const loginUser = async function(req,res){
-     try{ let data = req.body
-          if (Object.entries(data).length === 0) {
-               res.status(400).send({ status: false, msg: "Kindly pass some data " })
-          }
 
-          let username = req.body.email
-          let password = req.body.password
-          let user = await AuthorModel.findOne({email : username,password : password})
-
-          if(!user)
-          {
-               return res.status(400).send({status : false, msg : "Credentials don't match,Please Check and Try again"})
-          }
-
-          let token = jwt.sign({
-               userId : user._id.toString(),  
-               batch: "thorium",
-          },"Project_1")
-          res.setHeader("x-api-key", token);
-          res.status(200).send({status : true, data : token})
-
-     }
-     catch(error)
-     {
-          console.log(error)
-          res.status(500).send({status: false, msg: error.message})
-     }
-}
 
 
 module.exports.createAuthor=createAuthor

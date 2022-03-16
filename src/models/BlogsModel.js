@@ -15,14 +15,14 @@ const blogsmodel = new mongoose.Schema( {
         ref:"AuthorModel"
     },
     tags: { 
-        type:[]
+        type:[String]
     },
     category: {
-        type:[],
+        type:[String],
          required:true,
     },
     subcategory: {
-        type:[],
+        type:[String],
     },
     isDeleted: { 
         type:Boolean,

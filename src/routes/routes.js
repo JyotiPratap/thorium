@@ -8,11 +8,10 @@ router.get("/test-me", function (req, res) {
 })
 
 router.post("/createAuthor", controller.createAuthor)
-router.post("/createBlog",middleware.authentication ,controller.createBlog)
-router.get("/getblogs",middleware.authentication, controller.getblog)
-
-router.put("/blogs/:blogId",middleware.authentication,middleware.authorization,controller.updateBlog)
-router.delete("/deleteBlogs/:blogId",middleware.authentication,middleware.authorization,controller.deleteBlogs)
-router.delete("/blogs",middleware.authentication,middleware.authorization,controller.deleteByQuery)
+router.post("/createBlog",middleware.authorization ,controller.createBlog)
+router.get("/getblogs",middleware.authorization, controller.getblog)
 router.post("/login",controller.loginUser)
+router.delete("/deleteBlogs/:blogId",middleware.authorization,controller.deleteBlogs)
+router.put("/blogs/:blogId",middleware.authorization,controller.updateBlog)
+router.delete("/blogs",middleware.authorization,controller.deleteByQuery)
 module.exports = router;
