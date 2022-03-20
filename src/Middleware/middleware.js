@@ -1,4 +1,20 @@
 const jwt = require("jsonwebtoken")
+const authentication = function(req,res,next){
+    try{
+        let token = req.headers["x-api-key"]
+        if(!token)
+        return res.status(401).send({status: false, msg:"Token not present"})
+    
+        let decodedToken = jwt.verify(token,"Project_1")
+        if(!decodedToken)
+        return res.status(401).send({status:false,msg:"Token is invalid"})
+    next()
+    }
+    catch(error)
+    {
+        res.status(500).send({status : false,msg : error.message})
+    }
+}
 const authorization = function(req, res, next) {
     
     try{
@@ -31,3 +47,4 @@ const authorization = function(req, res, next) {
 
 
     module.exports.authorization=authorization
+    module.exports.authentication=authentication

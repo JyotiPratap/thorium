@@ -15,7 +15,7 @@ const authormodel = new mongoose.Schema( {
         required:true,
         unique:true,
         type:String,
-        match:/.\@.\..*/
+        // match:/.\@.\..*/
         //xyz@gmail.com
     },
     password:

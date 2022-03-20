@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const controller= require("../controllers/controllers")
-const middleware= require("../Middleware/middleware")
+const ProjectController= require("../controllers/controllers")
+const ProjectMiddleware= require("../Middleware/middleware")
 
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-router.post("/createAuthor", controller.createAuthor)
-router.post("/createBlog",middleware.authorization ,controller.createBlog)
-router.get("/getblogs",middleware.authorization, controller.getblog)
-router.post("/login",controller.loginUser)
-router.delete("/deleteBlogs/:blogId",middleware.authorization,controller.deleteBlogs)
-router.put("/blogs/:blogId",middleware.authorization,controller.updateBlog)
-router.delete("/blogs",middleware.authorization,controller.deleteByQuery)
+router.post("/authors",ProjectController.createAuthor)
+router.post("/blogs",ProjectMiddleware.authorization,ProjectController.createBlog)
+router.post("/login",ProjectController.loginUser)
+router.get("/blogs",ProjectMiddleware.authorization,ProjectController.getblog)
+router.put("/blogs/:blogId",ProjectMiddleware.authorization,ProjectController.updateBlog)
+router.delete("/deleteBlogs/:blogId",ProjectMiddleware.authorization,ProjectController.deleteBlogs)
+router.delete('/blogs', ProjectMiddleware.authorization,ProjectController.deleteByQuery);
 module.exports = router;
